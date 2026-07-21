@@ -16,168 +16,141 @@ st.set_page_config(
     layout="wide",
 )
 
-# ── Theme Toggle State Engine ───────────────────────────────────
-with st.sidebar:
-    st.markdown("### Platform Controls")
-    theme_selection = st.radio(
-        "Application Interface Theme",
-        ["Luxury Light", "Premium Dark"],
-        index=0
-    )
-
-# Dynamic Variable Mappings based on Selector State
-if theme_selection == "Luxury Light":
-    bg_app = "#FDFDFB"
-    bg_card = "#F5F4F0"
-    border_card = "#E2E0D8"
-    text_main = "#1A2421"
-    text_muted = "#5C6A62"
-    plotly_template = "plotly_white"
-    
-    # Premium Light H2H Table Variables
-    h2h_winner_bg = "rgba(0, 102, 51, 0.08)"
-    h2h_winner_text = "#006633"
-    h2h_loser_bg = "transparent"
-    h2h_loser_text = "#1A2421"
-    table_header_bg = "#1A2421"
-    table_header_text = "#FDFDFB"
-else:
-    bg_app = "#0A0E0C"
-    bg_card = "#121815"
-    border_card = "#1F2925"
-    text_main = "#F8FAFC"
-    text_muted = "#8CA396"
-    plotly_template = "plotly_dark"
-    
-    # Premium Dark H2H Table Variables
-    h2h_winner_bg = "rgba(0, 102, 51, 0.2)"
-    h2h_winner_text = "#10B981"
-    h2h_loser_bg = "transparent"
-    h2h_loser_text = "#8CA396"
-    table_header_bg = "#121815"
-    table_header_text = "#F8FAFC"
-
-# ── Typography & Dynamic Theme Responsive Style Injection ───────
-st.markdown(f"""
+# ── Native Streamlit Variable Integration CSS ───────────────────
+st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=EB+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@400;500;600&family=Roboto+Mono:wght@400;500&display=swap');
-    
-    .stApp {{
-        background-color: {bg_app} !important;
-        color: {text_main} !important;
-    }}
-    
-    h1, .championship-title {{
+
+    /* Bind main typography to native Streamlit text variable */
+    h1, .championship-title {
         font-family: 'Playfair Display', Georgia, serif !important;
         font-weight: 700 !important;
-        color: {text_main} !important;
+        color: var(--text-color) !important;
         letter-spacing: -0.01em !important;
-    }}
+    }
     
-    h2, h3, h4, h5, h6, .metric-label, .player-name, .framework-subtitle, div[data-testid="stMarkdownContainer"] p {{
+    h2, h3, h4, h5, h6, .metric-label, .player-name, .framework-subtitle {
         font-family: 'EB Garamond', Georgia, serif !important;
-        color: {text_main} !important;
-    }}
-    
-    h2, h3, h4, h5, h6 {{
+        color: var(--text-color) !important;
         font-weight: 600 !important;
         letter-spacing: 0.01em !important;
-    }}
-    
-    .profile-card {{
-        background-color: {bg_card};
-        border: 1px solid {border_card};
-        border-top: 4px solid #006633; 
+    }
+
+    /* Force all text paragraphs, spans, and headings inside markdown to use native text color */
+    div[data-testid="stMarkdownContainer"] p, 
+    div[data-testid="stMarkdownContainer"] span,
+    div[data-testid="stMarkdownContainer"] li,
+    div[data-testid="stMarkdownContainer"] h1,
+    div[data-testid="stMarkdownContainer"] h2,
+    div[data-testid="stMarkdownContainer"] h3,
+    div[data-testid="stMarkdownContainer"] h4,
+    div[data-testid="stMarkdownContainer"] h5,
+    div[data-testid="stMarkdownContainer"] h6 {
+        color: var(--text-color) !important;
+    }
+
+    /* Cards adapt to secondary background and primary text colors */
+    .profile-card {
+        background-color: var(--secondary-background-color) !important;
+        border: 1px solid rgba(128, 128, 128, 0.2) !important;
+        border-top: 4px solid #006633 !important; 
         padding: 24px;
-        border-radius: 4px;
+        border-radius: 6px;
         text-align: left;
         margin-bottom: 16px;
-        box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-    }}
+        box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    }
     
-    .player-name {{
+    .player-name {
         font-size: 26px;
         font-weight: 700;
         margin-bottom: 2px;
-    }}
+        color: var(--text-color) !important;
+    }
     
-    .player-meta {{
+    .player-meta {
         font-family: 'Inter', sans-serif !important;
         font-size: 11px;
-        color: {text_muted};
+        color: var(--text-color) !important;
+        opacity: 0.7;
         text-transform: uppercase;
         letter-spacing: 0.08em;
         font-weight: 600;
         margin-bottom: 18px;
-    }}
+    }
     
-    .metric-value {{
+    .metric-value {
         font-family: 'Roboto Mono', monospace;
         font-size: 30px;
         font-weight: 500;
-        color: #006633;
+        color: #006633 !important;
         margin-bottom: 2px;
-    }}
+    }
     
-    .data-grid {{
+    .data-grid {
         margin-top: 18px;
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 12px;
-        border-top: 1px solid {border_card};
+        border-top: 1px solid rgba(128, 128, 128, 0.2);
         padding-top: 14px;
-    }}
+    }
     
-    .data-item {{
-        color: {text_muted};
+    .data-item {
+        color: var(--text-color) !important;
+        opacity: 0.8;
         font-size: 14px;
-    }}
+    }
     
-    .data-item strong {{
-        color: {text_main};
+    .data-item strong {
+        color: var(--text-color) !important;
+        opacity: 1;
         font-family: 'Roboto Mono', monospace;
-    }}
+    }
     
-    .analysis-box {{
-        background-color: {bg_card};
-        border-left: 4px solid #006633;
+    .analysis-box {
+        background-color: var(--secondary-background-color) !important;
+        border-left: 4px solid #006633 !important;
+        border-top: 1px solid rgba(128, 128, 128, 0.2) !important;
+        border-right: 1px solid rgba(128, 128, 128, 0.2) !important;
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
         padding: 24px;
-        border-radius: 4px;
-        color: {text_main};
+        border-radius: 6px;
+        color: var(--text-color) !important;
         font-size: 16px;
         line-height: 1.65;
         font-family: 'EB Garamond', Georgia, serif;
-    }}
+    }
 
-    div[data-testid="stTabs"] button {{
+    /* Navigation Tabs */
+    div[data-testid="stTabs"] button {
+        background-color: transparent !important;
+        border-bottom: 2px solid transparent !important;
+    }
+    div[data-testid="stTabs"] button p {
+        color: var(--text-color) !important;
+        opacity: 0.7;
         font-family: 'EB Garamond', Georgia, serif !important;
         font-size: 18px !important;
-        color: {text_muted} !important;
-    }}
-    div[data-testid="stTabs"] button[aria-selected="true"] {{
-        color: #006633 !important;
+    }
+    div[data-testid="stTabs"] button[aria-selected="true"] {
         border-bottom-color: #006633 !important;
+    }
+    div[data-testid="stTabs"] button[aria-selected="true"] p {
+        color: #006633 !important;
+        opacity: 1 !important;
         font-weight: bold !important;
-    }}
-    div[data-testid="stTabs"] button:hover {{
-        color: {text_main} !important;
-    }}
+    }
 
-    div[data-testid="stRadio"] label, div[data-baseweb="select"] * {{
+    /* Radio Buttons & Inputs */
+    div[data-testid="stRadio"] label p, div[data-testid="stWidgetLabel"] p {
         font-family: 'Inter', sans-serif !important;
-        color: {text_main} !important;
-    }}
-    div[data-testid="stRadio"] label {{
+        color: var(--text-color) !important;
         font-size: 14px !important;
-    }}
-    div[data-baseweb="radio"] div[aria-checked="true"] > div {{
-        background-color: #006633 !important;
-    }}
-    div[data-baseweb="radio"] div[aria-checked="true"] {{
-        border-color: #006633 !important;
-    }}
+    }
 
-    div.stButton > button:first-child {{
+    /* Action Buttons */
+    div.stButton > button:first-child {
         background-color: #006633 !important;
         color: #FFFFFF !important;
         border: 1px solid #006633 !important;
@@ -185,184 +158,92 @@ st.markdown(f"""
         font-weight: 500 !important;
         border-radius: 4px !important;
         padding: 8px 20px !important;
-    }}
-    div.stButton > button:first-child:hover {{
-        background-color: #004D26 !important;
-        border-color: #004D26 !important;
-    }}
+    }
 
-    /* Elegant Editorial Matrix Borders & Alignment */
-    .h2h-table {{
+    /* Head-to-Head Table */
+    .h2h-table {
         width: 100%;
         border-collapse: collapse;
         font-family: 'Inter', sans-serif;
         margin-top: 10px;
-    }}
-    .h2h-table th {{
+    }
+    .h2h-table th {
         padding: 16px 20px;
-        background-color: {table_header_bg};
-        color: {table_header_text};
+        background-color: var(--secondary-background-color) !important;
+        color: var(--text-color) !important;
         font-family: 'EB Garamond', Georgia, serif;
         font-size: 18px;
         font-weight: 600;
-        letter-spacing: 0.01em;
-        border: none;
-    }}
-    .h2h-table td {{
+        border-bottom: 2px solid rgba(128, 128, 128, 0.3) !important;
+    }
+    .h2h-table td {
         padding: 14px 20px;
         font-size: 14px;
         vertical-align: middle;
-        border-bottom: 1px solid {border_card};
-    }}
-    .h2h-dim-cell {{
+        border-bottom: 1px solid rgba(128, 128, 128, 0.2) !important;
+        background-color: var(--background-color) !important;
+    }
+    .h2h-dim-cell {
         font-family: 'EB Garamond', Georgia, serif;
         font-weight: 600;
         font-size: 16px !important;
-        color: {text_main};
+        color: var(--text-color) !important;
         width: 40%;
-    }}
-    .h2h-stat-cell {{
+    }
+    .h2h-stat-cell {
         font-family: 'Roboto Mono', monospace;
         font-size: 14px;
         font-weight: 500;
         text-align: center;
         width: 30%;
-    }}
+    }
 </style>
 """, unsafe_allow_html=True)
 
-# ── 2025 Player Matrices ────────────────────────────────────────
+# ── Data Matrices ───────────────────────────────────────────────
 PLAYERS = {
     "Novak Djokovic": {
-        "country": "SRB",
-        "rank": 2,
-        "age": 38,
-        "grand_slams": 24,
-        "wimbledon_titles": 7,
-        "win_rate_2025": 78,
-        "grass_win_rate": 85,
-        "serve_speed_kmh": 215,
-        "aces_per_match": 9.2,
-        "first_serve_pct": 63,
-        "style": "All-court baseline master",
-        "strength": "Return depth, mental resilience",
-        "weakness": "Age-related fatigue in deep 5-setters",
-        "odds_to_win": 18,
+        "country": "SRB", "rank": 2, "age": 38, "grand_slams": 24, "wimbledon_titles": 7,
+        "win_rate_2025": 78, "grass_win_rate": 85, "serve_speed_kmh": 215, "aces_per_match": 9.2,
+        "first_serve_pct": 63, "style": "All-court baseline master", "odds_to_win": 18,
     },
     "Carlos Alcaraz": {
-        "country": "ESP",
-        "rank": 3,
-        "age": 22,
-        "grand_slams": 4,
-        "wimbledon_titles": 2,
-        "win_rate_2025": 82,
-        "grass_win_rate": 80,
-        "serve_speed_kmh": 220,
-        "aces_per_match": 8.1,
-        "first_serve_pct": 65,
-        "style": "Aggressive all-court attacking",
-        "strength": "Drop shot variation, linear athleticism",
-        "weakness": "Unforced error inconsistency under pressure",
-        "odds_to_win": 22,
+        "country": "ESP", "rank": 3, "age": 22, "grand_slams": 4, "wimbledon_titles": 2,
+        "win_rate_2025": 82, "grass_win_rate": 80, "serve_speed_kmh": 220, "aces_per_match": 8.1,
+        "first_serve_pct": 65, "style": "Aggressive all-court attacking", "odds_to_win": 22,
     },
     "Jannik Sinner": {
-        "country": "ITA",
-        "rank": 1,
-        "age": 23,
-        "grand_slams": 3,
-        "wimbledon_titles": 0,
-        "win_rate_2025": 86,
-        "grass_win_rate": 72,
-        "serve_speed_kmh": 218,
-        "aces_per_match": 7.8,
-        "first_serve_pct": 67,
-        "style": "Powerful baseline grinder",
-        "strength": "Groundstroke depth, topspin consistency",
-        "weakness": "Lateral transition limits on grass",
-        "odds_to_win": 25,
+        "country": "ITA", "rank": 1, "age": 23, "grand_slams": 3, "wimbledon_titles": 0,
+        "win_rate_2025": 86, "grass_win_rate": 72, "serve_speed_kmh": 218, "aces_per_match": 7.8,
+        "first_serve_pct": 67, "style": "Powerful baseline grinder", "odds_to_win": 25,
     },
     "Daniil Medvedev": {
-        "country": "RUM",
-        "rank": 4,
-        "age": 29,
-        "grand_slams": 1,
-        "wimbledon_titles": 0,
-        "win_rate_2025": 74,
-        "grass_win_rate": 68,
-        "serve_speed_kmh": 210,
-        "aces_per_match": 10.1,
-        "first_serve_pct": 62,
-        "style": "Unorthodox defensive counter-puncher",
-        "strength": "First serve velocity, deep baseline coverage",
-        "weakness": "Low-bounce mechanical movement issues",
-        "odds_to_win": 12,
+        "country": "RUM", "rank": 4, "age": 29, "grand_slams": 1, "wimbledon_titles": 0,
+        "win_rate_2025": 74, "grass_win_rate": 68, "serve_speed_kmh": 210, "aces_per_match": 10.1,
+        "first_serve_pct": 62, "style": "Unorthodox defensive counter-puncher", "odds_to_win": 12,
     },
 }
 
 WOMEN_PLAYERS = {
     "Iga Swiatek": {
-        "country": "POL",
-        "rank": 1,
-        "age": 24,
-        "grand_slams": 5,
-        "wimbledon_titles": 0,
-        "win_rate_2025": 88,
-        "grass_win_rate": 70,
-        "serve_speed_kmh": 185,
-        "aces_per_match": 3.2,
-        "first_serve_pct": 65,
-        "style": "Topspin baseline dominance",
-        "strength": "Forehand heavy rotation, lateral speed",
-        "weakness": "Low slice variations on fast grass",
-        "odds_to_win": 20,
+        "country": "POL", "rank": 1, "age": 24, "grand_slams": 5, "wimbledon_titles": 0,
+        "win_rate_2025": 88, "grass_win_rate": 70, "serve_speed_kmh": 185, "aces_per_match": 3.2,
+        "first_serve_pct": 65, "style": "Topspin baseline dominance", "odds_to_win": 20,
     },
     "Aryna Sabalenka": {
-        "country": "BLR",
-        "rank": 2,
-        "age": 27,
-        "grand_slams": 3,
-        "wimbledon_titles": 0,
-        "win_rate_2025": 80,
-        "grass_win_rate": 75,
-        "serve_speed_kmh": 195,
-        "aces_per_match": 5.8,
-        "first_serve_pct": 62,
-        "style": "Powerful aggressive baseline",
-        "strength": "Serve execution, flat groundstroke power",
-        "weakness": "Double fault lapses during critical breaks",
-        "odds_to_win": 25,
+        "country": "BLR", "rank": 2, "age": 27, "grand_slams": 3, "wimbledon_titles": 0,
+        "win_rate_2025": 80, "grass_win_rate": 75, "serve_speed_kmh": 195, "aces_per_match": 5.8,
+        "first_serve_pct": 62, "style": "Powerful aggressive baseline", "odds_to_win": 25,
     },
     "Elena Rybakina": {
-        "country": "KAZ",
-        "rank": 6,
-        "age": 26,
-        "grand_slams": 1,
-        "wimbledon_titles": 1,
-        "win_rate_2025": 74,
-        "grass_win_rate": 82,
-        "serve_speed_kmh": 192,
-        "aces_per_match": 6.1,
-        "first_serve_pct": 63,
-        "style": "Serve and volley power",
-        "strength": "Flat baseline depth, quiet composure",
-        "weakness": "Physical strain in extended point durations",
-        "odds_to_win": 30,
+        "country": "KAZ", "rank": 6, "age": 26, "grand_slams": 1, "wimbledon_titles": 1,
+        "win_rate_2025": 74, "grass_win_rate": 82, "serve_speed_kmh": 192, "aces_per_match": 6.1,
+        "first_serve_pct": 63, "style": "Serve and volley power", "odds_to_win": 30,
     },
     "Coco Gauff": {
-        "country": "USA",
-        "rank": 3,
-        "age": 21,
-        "grand_slams": 1,
-        "wimbledon_titles": 0,
-        "win_rate_2025": 76,
-        "grass_win_rate": 70,
-        "serve_speed_kmh": 182,
-        "aces_per_match": 3.8,
-        "first_serve_pct": 66,
-        "style": "Athletic all-court defensive game",
-        "strength": "Backhand drive, fast perimeter defense",
-        "weakness": "Forehand wing structural errors under pressure",
-        "odds_to_win": 18,
+        "country": "USA", "rank": 3, "age": 21, "grand_slams": 1, "wimbledon_titles": 0,
+        "win_rate_2025": 76, "grass_win_rate": 70, "serve_speed_kmh": 182, "aces_per_match": 3.8,
+        "first_serve_pct": 66, "style": "Athletic all-court defensive game", "odds_to_win": 18,
     },
 }
 
@@ -480,15 +361,13 @@ with tab1:
     fig = px.bar(
         df, x="Value", y="Player", orientation="h",
         color="Value",
-        color_continuous_scale=["#E2E0D8" if theme_selection == "Luxury Light" else "#1A2420", "#006633", "#1A2421"], 
+        color_continuous_scale=["#E2E0D8", "#006633"], 
         title=f"Field Weighting: {metric.replace('_', ' ').title()}",
-        template=plotly_template,
     )
     fig.update_layout(
-        paper_bgcolor=bg_app,
-        plot_bgcolor=bg_app,
+        paper_bgcolor="rgba(0,0,0,0)",
+        plot_bgcolor="rgba(0,0,0,0)",
         coloraxis_showscale=False,
-        font=dict(family="Inter", color=text_main),
         height=260,
     )
     st.plotly_chart(fig, use_container_width=True)
@@ -520,14 +399,12 @@ with tab2:
             ("First Serve In-Play Conversion", f"{d1['first_serve_pct']}%", f"{d2['first_serve_pct']}%", d1['first_serve_pct'] > d2['first_serve_pct']),
         ]
 
-        # FIXED & CLEANED: Compiled rows seamlessly into an absolute continuous HTML string block
-        # to ensure that Streamlit processes it natively without falling back to pre-formatted text mode.
         table_body = ""
         for m in metrics:
-            bg_p1 = h2h_winner_bg if m[3] else h2h_loser_bg
-            bg_p2 = h2h_winner_bg if not m[3] else h2h_loser_bg
-            color_p1 = h2h_winner_text if m[3] else h2h_loser_text
-            color_p2 = h2h_winner_text if not m[3] else h2h_loser_text
+            bg_p1 = "rgba(0, 102, 51, 0.15)" if m[3] else "transparent"
+            bg_p2 = "rgba(0, 102, 51, 0.15)" if not m[3] else "transparent"
+            color_p1 = "#006633" if m[3] else "var(--text-color)"
+            color_p2 = "#006633" if not m[3] else "var(--text-color)"
             
             table_body += f"""<tr>
                 <td class='h2h-dim-cell'>{m[0]}</td>
@@ -562,28 +439,22 @@ with tab2:
         v2 = [d2['grass_win_rate'], d2['win_rate_2025'], norm(d2['grand_slams'], 0, 24), norm(d2['wimbledon_titles'], 0, 7), norm(d2['serve_speed_kmh'], 180, 230), d2['first_serve_pct']]
 
         fig = go.Figure()
-        fig.add_trace(go.Scatterpolar(r=v1 + [v1[0]], theta=categories + [categories[0]], fill='toself', name=p1, line_color='#006633', fillcolor='rgba(0,102,51,0.04)'))
-        fig.add_trace(go.Scatterpolar(r=v2 + [v2[0]], theta=categories + [categories[0]], fill='toself', name=p2, line_color='#6B7A72', fillcolor='rgba(107,122,114,0.04)'))
+        fig.add_trace(go.Scatterpolar(r=v1 + [v1[0]], theta=categories + [categories[0]], fill='toself', name=p1, line_color='#006633', fillcolor='rgba(0,102,51,0.08)'))
+        fig.add_trace(go.Scatterpolar(r=v2 + [v2[0]], theta=categories + [categories[0]], fill='toself', name=p2, line_color='#6B7A72', fillcolor='rgba(107,122,114,0.08)'))
         
         fig.update_layout(
             polar=dict(
                 radialaxis=dict(
                     visible=True, 
                     range=[0, 100], 
-                    gridcolor=border_card, 
-                    color=text_muted,
                     tickfont=dict(family="Roboto Mono")
                 ),
                 angularaxis=dict(
-                    gridcolor=border_card, 
-                    color=text_muted,
                     tickfont=dict(family="Inter")
                 ),
-                bgcolor=bg_app,
+                bgcolor="rgba(0,0,0,0)",
             ),
-            paper_bgcolor=bg_app,
-            font=dict(color=text_main, family="Inter"),
-            legend=dict(bgcolor=bg_card, bordercolor=border_card),
+            paper_bgcolor="rgba(0,0,0,0)",
             title="Biometric Index Radial Dispersion",
             height=380,
         )
@@ -639,20 +510,16 @@ with tab4:
         fig = px.bar(
             odds_df, x="Player", y="Index",
             color="Index",
-            color_continuous_scale=["#E2E0D8" if theme_selection == "Luxury Light" else "#1A2420", "#006633", "#1A2421"],
+            color_continuous_scale=["#E2E0D8", "#006633"],
             title="Aggregated Target Variable Weighting Coefficients",
-            template=plotly_template,
         )
         fig.update_layout(
-            paper_bgcolor=bg_app,
-            plot_bgcolor=bg_app,
+            paper_bgcolor="rgba(0,0,0,0)",
+            plot_bgcolor="rgba(0,0,0,0)",
             coloraxis_showscale=False,
-            font=dict(family="Inter", color=text_main),
             yaxis_title="Probability Density Over Time",
         )
         st.plotly_chart(fig, use_container_width=True)
 
 st.markdown("---")
-st.caption(
-    "Data Platform Model Systems Framework Architecture Description Log"
-)
+st.caption("Data Platform Model Systems Framework Architecture Description Log")
